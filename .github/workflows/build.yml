@@ -8,9 +8,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
       
-      - name: Set up Java
+      - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
@@ -20,21 +21,24 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.0' # Nimepandisha toleo hapa
+          flutter-version: '3.22.0'
           channel: 'stable'
           cache: true
 
-      - name: Get dependencies
+      - name: Install Dependencies
         run: flutter pub get
 
-      - name: Build APK
+      - name: Build APK (Release Mode)
         run: flutter build apk --release
         env:
+          # Hapa tunaunganisha siri zako za Supabase kitalamu
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
-      - name: Upload APK
+      - name: Upload VEX Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ThinkChat-VEX-Release
           path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
+          retention-days: 7
