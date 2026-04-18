@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'app_config.dart'; // Hapa tunasoma siri zetu
+import 'screens/home/home_navigation.dart'; // Hapa ni baada ya kubonyeza Join
 
 void main() async {
-  // Ensure Flutter is fully initialized before starting the app
+  // 1. Hakikisha Flutter imeamka kikamilifu
   WidgetsFlutterBinding.ensureInitialized();
 
-  // SECURE KEY SPLITTING: To bypass GitHub Push Protection
-  final String p1 = 'sb_secret';
-  final String p2 = '_zhNuR7HI9KctlqfXNyEjHQ';
-  final String p3 = '_aSMxefnx';
-
-  // Initialize Supabase with your project credentials
+  // 2. Washa Injini ya Supabase kwa kutumia Siri kutoka AppConfig
   await Supabase.initialize(
-    url: 'https://phzbajidtalyshvxzuqj.supabase.co',
-    anonKey: p1 + p2 + p3,
+    url: AppConfig.supabaseUrl,
+    anonKey: AppConfig.supabaseAnonKey,
   );
 
   runApp(const ThinkChat());
@@ -26,13 +23,13 @@ class ThinkChat extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'ThinkChat',
+      title: AppConfig.appName,
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: Colors.black, // VEX Dark Theme
-        primaryColor: const Color(0xFFFF1493), // Neon Pink Color
+        scaffoldBackgroundColor: AppConfig.backgroundDark,
+        primaryColor: AppConfig.primaryPink,
         colorScheme: const ColorScheme.dark(
-          primary: Color(0xFFFF1493),
-          secondary: Color(0xFFFF1493),
+          primary: AppConfig.primaryPink,
+          secondary: AppConfig.primaryPink,
         ),
       ),
       home: const WelcomeScreen(),
@@ -58,13 +55,13 @@ class WelcomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // ThinkChat Logo with Neon Glow
+            // ThinkChat Logo with Neon Glow (VEX Style)
             Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFFFF1493).withOpacity(0.5),
+                    color: AppConfig.primaryPink.withOpacity(0.5),
                     blurRadius: 40,
                     spreadRadius: 5,
                   ),
@@ -73,7 +70,7 @@ class WelcomeScreen extends StatelessWidget {
               child: const Icon(
                 Icons.chat_bubble_rounded,
                 size: 100,
-                color: Color(0xFFFF1493),
+                color: AppConfig.primaryPink,
               ),
             ),
             const SizedBox(height: 25),
@@ -90,7 +87,7 @@ class WelcomeScreen extends StatelessWidget {
             const Text(
               'ThinkChat',
               style: TextStyle(
-                color: Color(0xFFFF1493),
+                color: AppConfig.primaryPink,
                 fontSize: 55,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 2,
@@ -106,7 +103,7 @@ class WelcomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 70),
             
-            // Start Button
+            // Start Button (Joining Pink Nation)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: SizedBox(
@@ -114,15 +111,20 @@ class WelcomeScreen extends StatelessWidget {
                 height: 60,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFF1493),
+                    backgroundColor: AppConfig.primaryPink,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     elevation: 15,
-                    shadowColor: const Color(0xFFFF1493).withOpacity(0.4),
+                    shadowColor: AppConfig.primaryPink.withOpacity(0.4),
                   ),
                   onPressed: () {
-                    // Logic for next screen
+                    // Baadaye hapa itapeleka kwenye Auth/Login
+                    // Kwa sasa tunaipeleka moja kwa moja kuona Tabs
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomeNavigation()),
+                    );
                   },
                   child: const Text(
                     'JOIN PINK NATION 🚀',
